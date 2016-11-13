@@ -1,12 +1,31 @@
-class HelloWorld extends React.Component {
+class Hello extends React.Component {
 	render() {
 		return (
-			<div>Hello, World!</div>
+			<div>{this.props.message}</div>
 		);
 	}
 }
 
+class App extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {message: ""};
+
+		fetch('/hello').then(function(resp) {
+			return resp.json();
+		}).then((function(j) {
+			this.setState({message: j.message});
+		}).bind(this));
+	}
+
+	render() {
+		return (
+			<Hello message={this.state.message} />
+		)
+	}
+}
+
 ReactDOM.render(
-	<HelloWorld />,
+	<App />,
 	document.getElementById('app')
 );
